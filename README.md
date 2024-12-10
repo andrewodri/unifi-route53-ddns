@@ -4,7 +4,7 @@ This repo contains a few barebones scripts and "playbooks" for setting up dynami
 
 The motivation for this repo was setting up WireGuard peers between home (Ubiquiti Dream Machine Pro), a remote VPN server (barebones Debian), and router that I can travel with (OpenWRT). Since all of these devices run on networks with dynamic IP addresses, I wanted something that works and is easy enough to adapt to new gear or configuirations.
 
-If get enough motivation to do sso, I might turn this into a configurable AWS CDK repo that just deploys everything.
+If get enough motivation to do so, I might turn this into a configurable AWS CDK repo that just deploys everything.
 
 ## For UniFi OS (i.e. Ubiquiti Dream Machine Pro)
 
@@ -15,7 +15,7 @@ At least as of v4.0.21, UniFi OS provides a pretty UI that ultimately uses [inad
 Follow these steps:
 
 1. Using the AWS Console, navigate to Route 53, and get the hosted zone ID of the zone that contains the record you want to update
-1. Using the AWS CLI, run the following commands: (replacing the appropriate variables of course)
+2. Using the AWS CLI, run the following commands: (replacing the appropriate variables of course)
 
 ```shell
 USER_NAME=ddns
@@ -74,10 +74,10 @@ This will create a user account that only has permission to update the specific 
     * _Execution role_: "Create a new role with basic Lambda permissions"; but if you know what you are doing, choose what you like knowing that we do not need anything beyond a default execution role
     * _Additional configurations_: Ensure that "Enable function URL" is checked. Ensure that "Auth type" is is NONE. Ensure that "Configure cross-origin resource sharing (CORS)" is checked.
 3. Click "Create Function"
-4. Dump the contents of `./route53-signaturev4.js` into the `index.mjs` editor, and click "Deploy"
-5. Make note of the value of "**Function URL**"
+4. Dump the contents of `./route53.js` into the `index.mjs` editor, and click "Deploy"
+5. Take note of the value of "**Function URL**"
 
-This will use some deprecated packages from thre Javascript AWS SDK to sign and make a request to Route 53 using the credentials we just set up as HTTP basic authentication sent to the Lambda function. The great thing about that is that we don't need any special roles configured in IAM, any NPM packages to be to be deployed, or API Gateway/CloudFront/VPC resources; we just need a plain old Lambda function with a URL.
+This this uses the Node crypto module to sign and make a request to Route 53 using the credentials we just set up as HTTP basic authentication sent to the Lambda function. The great thing about that is that we don't need any special roles configured in IAM, any NPM packages to be to be deployed, or API Gateway/CloudFront/VPC resources; we just need a plain old Lambda function with a URL.
 
 In UniFI OS, do the following:
 
